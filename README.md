@@ -23,18 +23,14 @@ meteor add copleykj:grapher-link-executor
 
 This package does not require you to use TypeScript, but it is written in TypeScript and includes type definitions in `grapher-link-executor.d.ts` in case you are.
 
-Unfortunately these aren't automatically picked up by editors such as VSCode and the file will need to be copied to `node_modules/meteor/copleykj:grapher-link-executor` manually.
-
-If you use Windows, the colon in the directory name presents a problem and so you will likely need to add the following type definitions manually to your project.
+Unfortunately these aren't automatically picked up by editors such as VSCode and they will need to be copied into your projects type defintions manually.
 
 ```ts
-import { Mongo } from 'meteor/mongo';
-
-declare module 'meteor/copleykj/grapher-link-executor' {
+declare module 'meteor/copleykj:grapher-link-executor' {
+    import { Mongo } from 'meteor/mongo'
     export function addLinks<T>(collection: Mongo.Collection<T>, links: object): void;
     export const executeLinks: () => void;
 }
-
 ```
 
 ## Usage
