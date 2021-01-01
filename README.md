@@ -41,10 +41,6 @@ There are 2 functions exported from this package `addLinks` and `executeLinks`.
 
 `addLinks` is similar to the function added to `Mongo.Collection` by `cultofcoders:grapher` except it takes a Collection as it's first argument, and the link definitions as it's second.
 
-> **Note**
->
->The link definition passed to `addLinks` is almost identical as you would pass to `Collection.addLinks` with the exception of the `collection` key which is a string (the same as passed to the colleciton constructor) instead of the collection instance itself.
-
 ```ts
 // /api/posts.ts
 import { addLinks } from "meteor/copleykj:grapher-link-executor";
@@ -61,7 +57,7 @@ addLinks(PostsCollection, {
     'author': {
         type: 'one',
         field: 'authorId',
-        collection: 'users', // notice this is the name, and not the instance
+        collection: Meteor.users, // notice this is the name, and not the instance
     }
 });
 ```

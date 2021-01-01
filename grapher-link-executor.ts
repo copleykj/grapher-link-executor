@@ -28,6 +28,11 @@ export function addLinks<T>(collection: Mongo.Collection<T>, links: object) {
             throw new Meteor.Error('Existing Link', `Link for "${key}" already exists on ${collectionName} collection`, JSON.stringify({ oldLink, newLink: link }));
         }
 
+        const linkCollectionName = link?.collection?._name;
+
+        if (linkCollectionName && !collections[linkCollectionName]) {
+            collections[linkCollectionName] = link.collection
+        }
 
         if (link.inversedBy) {
             inverseLinks[collectionName][key] = link;
@@ -49,21 +54,14 @@ export const executeLinks = () => {
 
     Object.keys(collections).forEach(collectionName => {
         const collection = collections[collectionName];
-
-        const standardLinkNames = Object.keys(standardLinks[collectionName]);
-        const inverseLinkNames = Object.keys(inverseLinks[collectionName])
+        const standardLinkNames = Object.keys(standardLinks[collectionName] || {});
+        const inverseLinkNames = Object.keys(inverseLinks[collectionName] || {})
 
         if (standardLinkNames.length) {
-            standardLinkNames.forEach(name => {
-                standardLinks[collectionName][name].collection = collections[standardLinks[collectionName][name].collection]
-            });
             collection.addLinks(standardLinks[collectionName]);
         }
 
         if (inverseLinkNames.length) {
-            inverseLinkNames.forEach(name => {
-                inverseLinks[collectionName][name].collection = collections[inverseLinks[collectionName][name].collection]
-            });
             collection.addLinks(inverseLinks[collectionName]);
         }
 
