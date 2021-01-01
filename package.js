@@ -1,6 +1,6 @@
 Package.describe({
   name: 'copleykj:grapher-link-executor',
-  version: '1.0.1',
+  version: '2.0.0',
   summary: 'Allow defining grapher links alongside their collections',
   git: 'https://github.com/copleykj/grapher-link-executor.git',
   documentation: 'README.md'
