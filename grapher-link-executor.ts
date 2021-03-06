@@ -1,12 +1,21 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
+import { Grapher } from 'meteor/cultofcoders:grapher';
+
+interface CollectionsCollection {
+    [key: string]: Mongo.Collection<any>
+}
+
+interface LinksCollection {
+    [key: string]: Grapher.Link<any>
+}
 
 let done = false;
-const collections = {}; //store collections uniquely
-const standardLinks = {}; // standard links stored under properties with names that correspond to collection names
-const inverseLinks = {}; // inverse links stored under properties with names that correspond to collection names
+const collections: CollectionsCollection = {}; //store collections uniquely
+const standardLinks: LinksCollection = {}; // standard links stored under properties with names that correspond to collection names
+const inverseLinks: LinksCollection = {}; // inverse links stored under properties with names that correspond to collection names
 
-export function addLinks<T>(collection: Mongo.Collection<T>, links: object) {
+export function addLinks<T>(collection: Mongo.Collection<T>, links: Grapher.Link<any>) {
     if (done) {
         throw new Meteor.Error(
             'addLinks(): Link Execution Finished',
