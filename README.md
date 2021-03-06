@@ -27,9 +27,10 @@ Unfortunately these aren't automatically picked up by editors such as VSCode and
 
 ```ts
 declare module 'meteor/copleykj:grapher-link-executor' {
-    import { Mongo } from 'meteor/mongo'
-    export function addLinks<T>(collection: Mongo.Collection<T>, links: object): void;
-    export const executeLinks: () => void;
+  import { Mongo } from 'meteor/mongo';
+  import { Grapher } from 'meteor/cultofcoders:grapher';
+  export function addLinks<T> (collection: Mongo.Collection<T>, links: Grapher.Link<any>): void;
+  export const executeLinks: () => void;
 }
 ```
 
@@ -53,20 +54,22 @@ export interface Post {
 
 export const PostsCollection = new Mongo.Collection<Post>('posts');
 
-addLinks(PostsCollection, {
-    'author': {
-        type: 'one',
-        field: 'authorId',
-        collection: Meteor.users, // notice this is the name, and not the instance
-    }
-});
+Meteor.startup(() => {
+    addLinks(PostsCollection, {
+        'author': {
+            type: 'one',
+            field: 'authorId',
+            collection: Meteor.users,
+        }
+    });
+})
 ```
 
 ```ts
 // /api/users.ts
 
 import { Meteor } from 'meteor/meteor';
-import { Post} from './posts';
+import { Post, PostsCollection } from './posts';
 import { addLinks } from 'meteor/copleykj:grapher-link-executor';
 
 export interface User extends Meteor.User {
@@ -86,11 +89,13 @@ export const Queries = {
 }
 
 
-addLinks(UsersCollection, {
-    'posts': {
-        collection: 'posts',
-        inversedBy: 'author'
-    }
+Meteor.statup(() => {
+    addLinks(UsersCollection, {
+        'posts': {
+            collection: PostsCollection,
+            inversedBy: 'author'
+        }
+    });
 });
 ```
 
