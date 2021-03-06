@@ -55,15 +55,17 @@ export const executeLinks = () => {
     Object.keys(collections).forEach(collectionName => {
         const collection = collections[collectionName];
         const standardLinkNames = Object.keys(standardLinks[collectionName] || {});
-        const inverseLinkNames = Object.keys(inverseLinks[collectionName] || {})
 
         if (standardLinkNames.length) {
             collection.addLinks(standardLinks[collectionName]);
         }
+    });
+    Object.keys(collections).forEach(collectionName => {
+        const collection = collections[collectionName];
+        const inverseLinkNames = Object.keys(inverseLinks[collectionName] || {})
 
         if (inverseLinkNames.length) {
             collection.addLinks(inverseLinks[collectionName]);
         }
-
     });
 };
