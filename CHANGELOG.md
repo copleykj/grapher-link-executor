@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.1
+
+### Bug Fixes
+
+Fixes issue where matching link cannot be found when defining inverse link
+
 ## 2.0.0
 
 ### Breaking Changes
