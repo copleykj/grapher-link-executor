@@ -10,6 +10,13 @@ interface LinksCollection {
     [key: string]: Grapher.Link<any>
 }
 
+// Helper function to ensure nested object property exists (replaces Meteor._ensure)
+function ensureProperty(obj: LinksCollection, key: string): void {
+    if (!(key in obj)) {
+        obj[key] = {} as Grapher.Link<any>;
+    }
+}
+
 let done = false;
 const collections: CollectionsCollection = {}; //store collections uniquely
 const standardLinks: LinksCollection = {}; // standard links stored under properties with names that correspond to collection names
@@ -26,8 +33,8 @@ export function addLinks<T>(collection: Mongo.Collection<T>, links: Grapher.Link
 
     collections[collectionName] = collection;
 
-    Meteor._ensure(standardLinks, collectionName);
-    Meteor._ensure(inverseLinks, collectionName);
+    ensureProperty(standardLinks, collectionName);
+    ensureProperty(inverseLinks, collectionName);
 
     Object.keys(links).forEach((key) => {
         let link = links[key];
